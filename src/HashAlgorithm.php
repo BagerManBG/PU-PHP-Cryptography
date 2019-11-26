@@ -38,4 +38,14 @@ abstract class HashAlgorithm {
   protected function leftRotate ($decimal, $bits) {
     return dechex((($decimal << $bits) | ($decimal >> (32 - $bits))) & 0xffffffff);
   }
+
+  /**
+   * @param $decimal
+   * @param $bits
+   *
+   * @return string
+   */
+  protected function rightRotate ($decimal, $bits) {
+    return dechex((($decimal >> $bits) | ($decimal << (32 - $bits))) & 0xffffffff);
+  }
 }

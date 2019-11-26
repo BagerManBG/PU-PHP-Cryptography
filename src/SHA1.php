@@ -14,9 +14,9 @@ class SHA1 extends HashAlgorithm {
     $h4 = 'C3D2E1F0';
 
     $w = $this->init();
-    $len = count($w);
+    $count = count($w);
 
-    for($i = 0; $i < $len / 16; $i++) {
+    for($i = 0; $i < $count / 16; $i++) {
       for ($j = 16 * ($i + 1); $j < 80 * ($i + 1); $j++) {
         $xor_result = bindec($w[$j - 3]) ^ bindec($w[$j - 8]) ^ bindec($w[$j - 14]) ^ bindec($w[$j - 16]);
         $rotated = decbin(hexdec($this->leftRotate($xor_result, 1)));
@@ -51,10 +51,10 @@ class SHA1 extends HashAlgorithm {
           $k = 'CA62C1D6';
         }
 
-        $temp = hexdec($this->leftRotate($a, 5)) + hexdec($this->leftRotate($a, 27)) + $f + $e + hexdec($k) + bindec($w[$j]);
+        $temp = hexdec($this->leftRotate($a, 5)) + $f + $e + hexdec($k) + bindec($w[$j]);
         $e = $d & 0xffffffff;
         $d = $c & 0xffffffff;
-        $c = hexdec($this->leftRotate(hexdec($b), 30)) | hexdec($this->leftRotate(hexdec($b), 2)) & 0xffffffff;
+        $c = hexdec($this->leftRotate(hexdec($b), 30)) & 0xffffffff;
         $b = $a & 0xffffffff;
         $a = $temp & 0xffffffff;
       }
