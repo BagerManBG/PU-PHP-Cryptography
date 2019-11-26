@@ -14,7 +14,7 @@ class MD5 extends HashAlgorithm {
 
     $M = $this->init();
 
-    for($i = 0; $i <= count($M) / 16 - 1; $i++){
+    for($i = 0; $i < count($M) / 16; $i++) {
       $A = $a;
       $B = $b;
       $C = $c;
@@ -95,12 +95,12 @@ class MD5 extends HashAlgorithm {
       $this->addVars($a, $b, $c, $d, $A, $B, $C, $D);
     }
 
-    $MD5 = '';
+    $hash = '';
     foreach (array($a, $b, $c, $d) as $x) {
-      $MD5 .= implode('', array_reverse(str_split(str_pad($x, 8, '0', STR_PAD_LEFT), 2)));
+      $hash .= implode('', array_reverse(str_split(str_pad($x, 8, '0', STR_PAD_LEFT), 2)));
     }
 
-    return $MD5;
+    return $hash;
   }
 
   /**
@@ -118,6 +118,7 @@ class MD5 extends HashAlgorithm {
     $B = hexdec($B);
     $C = hexdec($C);
     $D = hexdec($D);
+
     $aa = hexdec($a);
     $bb = hexdec($b);
     $cc = hexdec($c);
@@ -177,46 +178,8 @@ class MD5 extends HashAlgorithm {
     }
 
     $A = ($A + $calc + $M + $t) & 0xffffffff;
-    $A = $this->rotate($A, $s);
+    $A = $this->leftRotate($A, $s);
     $A = dechex((hexdec($B) + hexdec($A)) & 0xffffffff);
   }
 
-  /**
-   * @param $decimal
-   * @param $bits
-   *
-   * @return string
-   */
-  protected function rotate ($decimal, $bits) {
-    return dechex((($decimal << $bits) | ($decimal >> (32 - $bits))) & 0xffffffff);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  protected function init() {
-    $bin = '';
-    $length = strlen($this->salt) * 8;
-
-    for ($i = 0; $i < $length / 8; $i++) {
-      $bin .= str_pad(decbin(ord($this->salt[$i])), 8, '0', STR_PAD_LEFT);
-    }
-
-    $bin = str_pad($bin, $length, '0', STR_PAD_LEFT);
-    $bin .= '1';
-    $bin = str_pad($bin, '448', '0', STR_PAD_RIGHT);
-
-    $len_in_bin = decbin($length);
-    $target_len_in_bin = ceil(strlen($len_in_bin) / 4) * 4;
-
-    $bin .= str_pad($len_in_bin, $target_len_in_bin, '0', STR_PAD_LEFT);
-    $bin = str_pad($bin, 512, '0', STR_PAD_RIGHT);
-
-    $block = str_split($bin, 32);
-    foreach ($block as &$b) {
-      $b = implode('', array_reverse(str_split($b, 8)));
-    }
-
-    return $block;
-  }
 }
