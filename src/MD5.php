@@ -4,6 +4,13 @@ namespace src;
 
 class MD5 extends HashAlgorithm {
   /**
+   * {@InheritDoc}
+   */
+  public static function create() {
+    return new MD5();
+  }
+
+  /**
    * @return string
    */
   public function hash() {
@@ -187,10 +194,10 @@ class MD5 extends HashAlgorithm {
    */
   protected function init() {
     $bin = '';
-    $length = strlen($this->salt) * 8;
+    $length = strlen($this->string) * 8;
 
     for ($i = 0; $i < $length / 8; $i++) {
-      $bin .= str_pad(decbin(ord($this->salt[$i])), 8, '0', STR_PAD_LEFT);
+      $bin .= str_pad(decbin(ord($this->string[$i])), 8, '0', STR_PAD_LEFT);
     }
 
     $bin = str_pad($bin, $length, '0', STR_PAD_LEFT);

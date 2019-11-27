@@ -3,20 +3,25 @@
 namespace src;
 
 abstract class HashAlgorithm {
-  protected $salt;
+  protected $string;
+
+  /**
+   * Creates an object.
+   */
+  public static function create() { return; }
 
   /**
    * @return string
    */
-  public function getSalt() {
-    return $this->salt;
+  public function getString() {
+    return $this->string;
   }
 
   /**
-   * @param string $salt
+   * @param string $string
    */
-  public function setSalt($salt) {
-    $this->salt = $salt;
+  public function setString($string) {
+    $this->string = $string;
   }
 
   /**
